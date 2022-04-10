@@ -11,6 +11,7 @@ export const Container = styled.div`
   left: 0;
   width: 100%;
   height: 64px;
+  border-bottom: 1px solid ${lighten(0.2, '#161718')};
 `;
 
 export const SelectedIcon = styled.div`
@@ -25,6 +26,7 @@ export const SelectedIcon = styled.div`
 
 export const LeftIcons = styled.div`
   display: flex;
+  padding: 8px;
 `;
 
 export const MidIcons = styled.div`
@@ -47,7 +49,9 @@ export const MidIconsBackground = styled.div`
   }
 `;
 
-export const RightIcons = styled.div``;
+export const RightIcons = styled.div`
+  display: flex;
+`;
 
 export const IconBackground = styled.div`
   display: flex;

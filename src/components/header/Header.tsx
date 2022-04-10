@@ -46,7 +46,7 @@ const Header = function Header(): React.ReactElement {
         </MidIconsBackground>
       </MidIcons>
 
-      <LeftIcons>
+      <RightIcons>
         <IconBackground>
           <MenuIcon />
         </IconBackground>
@@ -62,7 +62,7 @@ const Header = function Header(): React.ReactElement {
         <IconBackground>
           <ArrowIcon />
         </IconBackground>
-      </LeftIcons>
+      </RightIcons>
     </Container>
   );
 };

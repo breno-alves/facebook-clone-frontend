@@ -1,8 +1,18 @@
 import React from 'react';
-import Dashboard from './pages/dashboard/Dashboard';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { GlobalStyle } from './core/config/globalStyles';
+
+import Routes from './routes/routes';
 
 function App(): React.ReactElement {
-  return <Dashboard />;
+  return (
+    <>
+      <GlobalStyle />
+      <Router>
+        <Routes />
+      </Router>
+    </>
+  );
 }
 
 export default App;
