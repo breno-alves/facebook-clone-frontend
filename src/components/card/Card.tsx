@@ -15,10 +15,10 @@ import {
 } from './styles';
 import AvatarPlaceholder from '../../assets/icons/avatar_placeholder.png';
 import { ReactComponent as BlueThumbsUpIcon } from '../../assets/icons/bluethumbsup.svg';
-import { IPosts } from '../../pages/dashboard/Dashboard';
+import { IPost } from '../../pages/dashboard/Dashboard';
 
 interface CardProps {
-  post: IPosts;
+  post: IPost;
 }
 
 const Card = function Card({ post }: CardProps): React.ReactElement {
@@ -40,14 +40,14 @@ const Card = function Card({ post }: CardProps): React.ReactElement {
             <p>{post.text}</p>
           </PostTextContainer>
         )}
-        {post.images.length > 0 && (
+        {post.images?.length > 0 && (
           <img src={post.images[0].url} alt="source file" />
         )}
       </MiddleContainer>
       <BottomContainer>
         <MetricsGroup>
           <BlueThumbsUpIcon />
-          <span>{post.likes.length}</span>
+          <span>{post.likes?.length || 0}</span>
         </MetricsGroup>
 
         <ButtonsGroup>

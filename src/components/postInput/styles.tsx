@@ -129,6 +129,7 @@ export const InputModal = styled.input`
   font-size: 24px;
   color: #e4e6eb;
   margin-bottom: 64px;
+  width: 100%;
 
   &:focus {
     border: none;
@@ -136,7 +137,9 @@ export const InputModal = styled.input`
   }
 `;
 
-export const FormModal = styled.form``;
+export const FormModal = styled.form`
+  width: 100%;
+`;
 
 export const FormGroupExtra = styled.div`
   display: flex;
@@ -160,7 +163,7 @@ export const SubmitButtonModal = styled.button`
   border: none;
   padding: 12px;
   border-radius: 5px;
-
+  width: 100%;
   color: #e4e6eb;
   font-size: 16px;
   font-weight: 600;

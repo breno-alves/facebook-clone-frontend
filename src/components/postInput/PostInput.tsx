@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   UpperGroup,
@@ -13,6 +13,7 @@ import {
   InputModal,
   SubmitButtonModal,
   FormGroupExtra,
+  FormModal,
 } from './styles';
 import AvatarPlaceholder from '../../assets/icons/avatar_placeholder.png';
 import Modal from '../modal/Modal';
@@ -20,13 +21,41 @@ import Modal from '../modal/Modal';
 import { ReactComponent as VideoIcon } from '../../assets/icons/video.svg';
 import { ReactComponent as PhotosIcon } from '../../assets/icons/photos.svg';
 import { ReactComponent as FeelingIcon } from '../../assets/icons/feeling.svg';
+import api from '../../core/services/api';
+import { IPost } from '../../pages/dashboard/Dashboard';
 
-const PostInput = function PostInput(): React.ReactElement {
+interface PostInputProps {
+  posts: IPost[];
+  setPosts: any;
+}
+
+const PostInput = function PostInput({
+  posts,
+  setPosts,
+}: PostInputProps): React.ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [postText, setPostText] = useState('');
 
   function openModalHandler(state: boolean): void {
+    setPostText('');
     setIsModalOpen(state);
   }
+
+  const handleSubmit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    event.preventDefault();
+    try {
+      const post = await api.post<any, IPost>('/posts', {
+        user: '$USER',
+        text: postText,
+      });
+      setIsModalOpen(false);
+      setPosts([post.data, ...posts]);
+    } catch (err) {
+      console.log('err:', err);
+    }
+  };
 
   return (
     <>
@@ -67,18 +96,26 @@ const PostInput = function PostInput(): React.ReactElement {
             <span>Create Post</span>
           </UpperModal>
           <BottomModal>
-            <AvatarGroupModal>
-              <Avatar src={AvatarPlaceholder} alt="avatar" />
-              <span>$USER</span>
-            </AvatarGroupModal>
+            <FormModal onSubmit={handleSubmit}>
+              <AvatarGroupModal>
+                <Avatar src={AvatarPlaceholder} alt="avatar" />
+                <span>$USER</span>
+              </AvatarGroupModal>
 
-            <InputModal placeholder="What's on your mind, $USER?" />
+              <InputModal
+                placeholder="What's on your mind, $USER?"
+                name="text"
+                type="text"
+                value={postText}
+                onChange={e => setPostText(e.target.value)}
+              />
 
-            <FormGroupExtra>
-              <span>Add to your post</span>
-              <PhotosIcon style={{ color: '#62ba60' }} />
-            </FormGroupExtra>
-            <SubmitButtonModal>Post</SubmitButtonModal>
+              <FormGroupExtra>
+                <span>Add to your post</span>
+                <PhotosIcon style={{ color: '#62ba60' }} />
+              </FormGroupExtra>
+              <SubmitButtonModal>Post</SubmitButtonModal>
+            </FormModal>
           </BottomModal>
         </ModalContainer>
       </Modal>

@@ -9,7 +9,7 @@ interface IImages {
   id?: string;
   url: string;
 }
-export interface IPosts {
+export interface IPost {
   id?: string;
   comments: string[];
   images: IImages[];
@@ -20,11 +20,11 @@ export interface IPosts {
 }
 
 const Dashboard = function Dashboard(): React.ReactElement {
-  const [posts, setPosts] = useState<IPosts[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   useEffect(() => {
     const getPosts = async (): Promise<void> => {
-      const response = await Api.get<IPosts[]>('/posts');
+      const response = await Api.get<IPost[]>('/posts');
       if (response.data) {
         console.log(response.data);
         setPosts(response.data);
@@ -38,7 +38,7 @@ const Dashboard = function Dashboard(): React.ReactElement {
     <>
       <Header />
       <Container>
-        <PostInput />
+        <PostInput posts={posts} setPosts={setPosts} />
 
         <FeedContainer>
           {posts && posts.map(p => <Card key={p.id} post={p} />)}
