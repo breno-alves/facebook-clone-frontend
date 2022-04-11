@@ -31,11 +31,9 @@ const Dashboard = function Dashboard(): React.ReactElement {
     const getPosts = async (): Promise<void> => {
       const response = await Api.get<IPost[]>('/posts');
       if (response.data) {
-        console.log(response.data);
         setPosts(response.data);
       }
     };
-
     getPosts();
   }, []);
 

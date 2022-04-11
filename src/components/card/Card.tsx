@@ -33,7 +33,6 @@ const Card = function Card({
     const idx = posts.findIndex(({ id }) => id === post.id);
 
     if (posts[idx].likes?.length > 0) {
-      console.log('qtd likes:', posts[idx].likes);
       await api.delete(
         `/posts/${posts[idx].id}/likes/${posts[idx].likes[0].id}`,
       );

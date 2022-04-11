@@ -35,9 +35,16 @@ const PostInput = function PostInput({
 }: PostInputProps): React.ReactElement {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postText, setPostText] = useState('');
+  const [image, setImage] = useState<any>(null);
+
+  function onFileChange(event: any): void {
+    // Update the state
+    setImage({ selectedFile: event.target.files[0] });
+  }
 
   function openModalHandler(state: boolean): void {
     setPostText('');
+    setImage(null);
     setIsModalOpen(state);
   }
 
@@ -46,13 +53,27 @@ const PostInput = function PostInput({
   ): Promise<void> => {
     event.preventDefault();
     try {
+      if (!postText) {
+        return;
+      }
       const post = await api.post<any, IPost>('/posts', {
         user: '$USER',
         text: postText,
       });
+
+      if (image) {
+        const formData = new FormData();
+
+        formData.append('file', image.selectedFile);
+        const img = await api.post<any, any>(
+          `/posts/${post.data.id}/images`,
+          formData,
+        );
+        post.data.images = [img.data];
+      }
+
       setIsModalOpen(false);
       setPosts([post.data, ...posts]);
-      console.log(posts);
     } catch (err) {
       console.log('err:', err);
     }
@@ -110,10 +131,9 @@ const PostInput = function PostInput({
                 value={postText}
                 onChange={e => setPostText(e.target.value)}
               />
-
               <FormGroupExtra>
                 <span>Add to your post</span>
-                <PhotosIcon style={{ color: '#62ba60' }} />
+                <input type="file" onChange={onFileChange} />
               </FormGroupExtra>
               <SubmitButtonModal>Post</SubmitButtonModal>
             </FormModal>
