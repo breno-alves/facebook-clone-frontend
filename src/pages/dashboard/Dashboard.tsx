@@ -9,11 +9,16 @@ interface IImages {
   id?: string;
   url: string;
 }
+
+interface ILikes {
+  id: string;
+  user: string;
+}
 export interface IPost {
   id?: string;
   comments: string[];
   images: IImages[];
-  likes: string[];
+  likes: ILikes[];
   text: string[];
   createdAt: Date;
   user: string;
@@ -41,7 +46,10 @@ const Dashboard = function Dashboard(): React.ReactElement {
         <PostInput posts={posts} setPosts={setPosts} />
 
         <FeedContainer>
-          {posts && posts.map(p => <Card key={p.id} post={p} />)}
+          {posts &&
+            posts.map(p => (
+              <Card key={p.id} post={p} posts={posts} setPosts={setPosts} />
+            ))}
         </FeedContainer>
       </Container>
     </>

@@ -16,12 +16,54 @@ import {
 import AvatarPlaceholder from '../../assets/icons/avatar_placeholder.png';
 import { ReactComponent as BlueThumbsUpIcon } from '../../assets/icons/bluethumbsup.svg';
 import { IPost } from '../../pages/dashboard/Dashboard';
+import api from '../../core/services/api';
 
 interface CardProps {
   post: IPost;
+  posts: IPost[];
+  setPosts: any;
 }
 
-const Card = function Card({ post }: CardProps): React.ReactElement {
+const Card = function Card({
+  post,
+  setPosts,
+  posts,
+}: CardProps): React.ReactElement {
+  async function handleLikeAction(): Promise<void> {
+    const idx = posts.findIndex(({ id }) => id === post.id);
+
+    if (posts[idx].likes?.length > 0) {
+      console.log('qtd likes:', posts[idx].likes);
+      await api.delete(
+        `/posts/${posts[idx].id}/likes/${posts[idx].likes[0].id}`,
+      );
+      const newPosts = posts.reduce((acc, curr) => {
+        if (curr.id === post.id) {
+          const nCurr = { ...curr, likes: [] };
+          acc.push(nCurr);
+          return acc;
+        }
+        acc.push(curr);
+        return acc;
+      }, [] as IPost[]);
+      setPosts([...newPosts]);
+    } else {
+      const like: any = await api.post(`/posts/${posts[idx].id}/likes`, {
+        user: '$USER',
+      });
+      const newPosts = posts.reduce((acc, curr) => {
+        if (curr.id === post.id) {
+          const nCurr = { ...curr, likes: [like.data] };
+          acc.push(nCurr);
+          return acc;
+        }
+        acc.push(curr);
+        return acc;
+      }, [] as IPost[]);
+      setPosts([...newPosts]);
+    }
+  }
+
   return (
     <Container>
       <UpperContainer>
@@ -51,9 +93,18 @@ const Card = function Card({ post }: CardProps): React.ReactElement {
         </MetricsGroup>
 
         <ButtonsGroup>
-          <GroupIcon>
-            <FiThumbsUp size={25} color="#b0b3b8" />
-            <span>Like</span>
+          <GroupIcon onClick={e => handleLikeAction()}>
+            <FiThumbsUp
+              size={25}
+              color={post.likes?.length > 0 ? '#4a82ff' : '#b0b3b8'}
+            />
+            <span
+              style={{
+                color: post.likes?.length > 0 ? '#4a82ff' : '#b0b3b8',
+              }}
+            >
+              Like
+            </span>
           </GroupIcon>
 
           <GroupIcon>

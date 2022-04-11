@@ -4,6 +4,7 @@ import { getToken } from './auth';
 interface ApiHandler {
   get<T>(url: string): Promise<AxiosResponse<T>>;
   post<T, U>(url: string, payload: T): Promise<AxiosResponse<U>>;
+  delete<T>(url: string): Promise<AxiosResponse<T>>;
 }
 interface Headers {
   headers: { [key: string]: string };
@@ -36,6 +37,10 @@ const api: ApiHandler = {
     return headers
       ? client.post(url, payload, headers)
       : client.post(url, payload);
+  },
+
+  delete: async url => {
+    return client.delete(url);
   },
 };
 

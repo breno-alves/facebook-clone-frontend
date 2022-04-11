@@ -52,6 +52,7 @@ const PostInput = function PostInput({
       });
       setIsModalOpen(false);
       setPosts([post.data, ...posts]);
+      console.log(posts);
     } catch (err) {
       console.log('err:', err);
     }
